@@ -12,21 +12,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-           $table->uuid('user_id');
-           $table->primary('user_id');
+           $table->uuid('id');
+           $table->primary('id');
             $table->string('username');
             $table->string('full_name');
             $table->string('email');
             $table->string('phone')->nullable();
             $table->string('password')->nullable();
-            $table->boolean('user_is_active')->default(true);
-            $table->boolean('user_remember_me')->default(true);
-            $table->string('user_added_by_user_id')->nullable();
-            $table->string('user_updated_by_user_id')->nullable();
-            $table->string('user_deleted_by_user_id')->nullable();
-            $table->ipAddress('user_added_by_ip_addr')->nullable();
-            $table->ipAddress('user_updated_by_ip_addr')->nullable();
-            $table->ipAddress('user_deleted_by_ip_addr')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->boolean('remember_me')->default(true);
+            $table->string('added_by_user_id')->nullable();
+            $table->string('updated_by_user_id')->nullable();
+            $table->string('deleted_by_user_id')->nullable();
+            $table->ipAddress('added_by_ip_addr')->nullable();
+            $table->ipAddress('updated_by_ip_addr')->nullable();
+            $table->ipAddress('deleted_by_ip_addr')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
