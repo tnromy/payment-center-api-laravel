@@ -5,19 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Lokasi extends Model {
+class Location extends Model {
     use HasFactory;
 
-    protected $table = 'lokasi';
-    protected $primaryKey = 'lokasi_id';
+    protected $primaryKey = 'location_id';
 
     public static function selectByVillageCode($villageCode) {
         $arr = explode(".", $villageCode);
 
-        $state = lokasi::where('lokasi_kode', $arr[0])->first();
-        $city = lokasi::where('lokasi_kode', $arr[0] . "." . $arr[1])->first();
-        $district = lokasi::where('lokasi_kode', $arr[0] . "." . $arr[1] . "." . $arr[2])->first();
-        $village = lokasi::where('lokasi_kode', $villageCode)->first();
+        $state = location::where('location_code', $arr[0])->first();
+        $city = location::where('location_code', $arr[0] . "." . $arr[1])->first();
+        $district = location::where('location_code', $arr[0] . "." . $arr[1] . "." . $arr[2])->first();
+        $village = location::where('location_code', $villageCode)->first();
 
         return compact([
             'state',
@@ -28,25 +27,25 @@ class Lokasi extends Model {
     }
 
     public static function states() {
-        $states = lokasi::whereRaw( 'CHAR_LENGTH(lokasi_kode) <= 2' )->get();
+        $states = location::whereRaw( 'CHAR_LENGTH(location_code) <= 2' )->get();
 
         return $states;
     }
 
-    public static function cities( $lokasi_kode ) {
-        $cities = lokasi::where( 'lokasi_kode', 'like', $lokasi_kode . '.%' )->where( 'lokasi_kode', 'not like', $lokasi_kode . '.%.%' )->get();
+    public static function cities( $location_code ) {
+        $cities = location::where( 'location_code', 'like', $location_code . '.%' )->where( 'location_code', 'not like', $location_code . '.%.%' )->get();
 
         return $cities;
     }
 
-    public static function districts( $lokasi_kode ) {
-        $districts = lokasi::where( 'lokasi_kode', 'like', $lokasi_kode . '.%' )->where( 'lokasi_kode', 'not like', $lokasi_kode . '.%.%' )->get();
+    public static function districts( $location_code ) {
+        $districts = location::where( 'location_code', 'like', $location_code . '.%' )->where( 'location_code', 'not like', $location_code . '.%.%' )->get();
 
         return $districts;
     }
 
-    public static function villages( $lokasi_kode ) {
-        $villages = lokasi::where( 'lokasi_kode', 'like', $lokasi_kode . '.%' )->get();
+    public static function villages( $location_code ) {
+        $villages = location::where( 'location_code', 'like', $location_code . '.%' )->get();
 
         return $villages;
     }

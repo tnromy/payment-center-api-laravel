@@ -18,7 +18,6 @@ Route::get('/', function(){
 	return "Welcome to API Simpeg Kota Tangerang Selatan";
 });
 
-include 'api2.php';
 
 
 

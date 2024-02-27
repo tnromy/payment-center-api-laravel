@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Providers\Keycloak;
 
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -8,7 +8,7 @@ use App\Providers\Keycloak\Keycloak;
 use Illuminate\Support\Facades\Redis;
 
 
-class AuthController extends Controller
+class KeycloakController extends  \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.

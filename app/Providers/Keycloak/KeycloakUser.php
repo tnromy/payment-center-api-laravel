@@ -2,13 +2,11 @@
 
 namespace App\Providers\Keycloak;
 
-use App\Models\Pegawai;
 
 class KeycloakUser
 {
     private $decodedToken;
     public $user_id;
-    public $pegawai_id;
     public $email;
     public $username;
     public $full_name;
@@ -26,12 +24,6 @@ class KeycloakUser
         $this->full_name = $decodedToken->name;
         $this->phone = $decodedToken->phone??null;
         $this->nik = $decodedToken->nik??null;
-
-        $pegawai = pegawai::where('user_id', $this->user_id)->first();
-
-        if($pegawai) {
-            $this->pegawai_id = $pegawai->pegawai_id;
-        }
         $clientId = env('KEYCLOAK_CLIENT_ID');
 
         $this->roles = $this->decodedToken->resource_access->{$clientId}->roles;

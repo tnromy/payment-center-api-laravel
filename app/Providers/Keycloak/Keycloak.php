@@ -471,13 +471,6 @@ $response = $client->post($this->getBaseUrlWithRealm().'/protocol/openid-connect
                 'email' => $user->email,
             ];
 
-            if(isset($user->phone)) {
-                $userData["phone"] = $user->phone;
-            }
-            if(isset($user->telp)) {
-                $userData["telp"] = $user->telp;
-            }
-
         if(!$userModel) {
             $userData["user_id"] = $user->user_id;
             $userData['user_added_by_user_id'] = $user->user_id;

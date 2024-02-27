@@ -18,7 +18,7 @@ Route::get('/', function() {
 });
 
 
-Route::get('/login/oauth2', function() {
+Route::get('/login/callback', function() {
 	//echo "halo";
 	return view('login.oauth2');
 });
