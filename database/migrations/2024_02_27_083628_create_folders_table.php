@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('aliases', function (Blueprint $table) {
-            $table->id();
+        Schema::create('folders', function (Blueprint $table) {
+             $table->id();
             $table->foreignIdFor(App\Models\Email::class);
-            $table->foreignIdFor(App\Models\User::class);
-            $table->string('from_addr');
-            $table->string('from_name');
+            $table->string('name');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -27,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('aliases');
+        Schema::dropIfExists('folders');
     }
 };

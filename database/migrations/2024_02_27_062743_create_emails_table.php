@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('enc');
             $table->string('from_addr');
             $table->string('from_name');
+            $table->softDeletes();
             $table->timestamps();
         });
     }

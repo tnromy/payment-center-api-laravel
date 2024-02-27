@@ -10,10 +10,11 @@ use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\OrganizationRole;
 use Storage;
+use Laravel\Scout\Searchable;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
+    use HasApiTokens, HasFactory, Notifiable, SoftDeletes, Searchable;
 
     /**
      * The attributes that are mass assignable.
@@ -40,6 +41,15 @@ class User extends Authenticatable
             'deleted_ip_addr',
 
     ];
+
+    public function toSearchableArray() {
+        return [
+        'username',
+        'full_name',
+        'email',
+        'phone',
+        ];
+    }
 
     
 

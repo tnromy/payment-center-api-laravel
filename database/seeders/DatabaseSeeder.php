@@ -13,6 +13,9 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(LocationsTableSeeder::class);
+        $this->call(EmailsTableSeeder::class);
+        $this->call(AliasesTableSeeder::class);
+        $this->call(FoldersTableSeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

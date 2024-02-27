@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Lokasi;
+use App\Models\Location;
 
-class LokasiController extends Controller {
+class LocationController extends Controller {
     /**
     * Display a listing of the resource.
     *
@@ -24,7 +24,7 @@ class LokasiController extends Controller {
     */
 
     public function states() {
-        $states = lokasi::states();
+        $states = location::states();
 
         return response()->json( [
             'status' => [
@@ -35,8 +35,8 @@ class LokasiController extends Controller {
         ] );
     }
 
-    public function cities( $lokasi_kode ) {
-        $cities = lokasi::cities( $lokasi_kode );
+    public function cities( $code ) {
+        $cities = location::cities( $code );
 
         return response()->json( [
             'status' => [
@@ -47,8 +47,8 @@ class LokasiController extends Controller {
         ] );
     }
 
-    public function districts( $lokasi_kode ) {
-        $districts = lokasi::districts( $lokasi_kode );
+    public function districts( $code ) {
+        $districts = location::districts( $code );
 
         return response()->json( [
             'status' => [
@@ -59,8 +59,8 @@ class LokasiController extends Controller {
         ] );
     }
 
-    public function villages( $lokasi_kode ) {
-        $villages = lokasi::villages( $lokasi_kode );
+    public function villages( $code ) {
+        $villages = location::villages( $code );
 
         return response()->json( [
             'status' => [
