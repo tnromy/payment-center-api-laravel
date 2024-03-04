@@ -7,9 +7,7 @@
 </head>
 <body>
 	
-	<h1>API Simpeg Login OAuth2 Demo Example</h1>
-
-  <div id="login-container"></div>
+	
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
 
@@ -39,9 +37,8 @@
     // Anda juga dapat mengembalikan nilai-nilai ini atau melakukan operasi lain sesuai kebutuhan.
   } // end function parseUrl
 
-  function checkStatus() {
-  	if(parseUrl()["state"] && parseUrl()["session_state"] && parseUrl()["code"]) {
-  		let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-token";
+      function getAccessToken() {
+        let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-token";
 
 let data = {
   "code": parseUrl()["code"],
@@ -49,40 +46,21 @@ let data = {
 
 };
 
-       axios.post(apiUrl, data).then(response => {
+ axios.post(apiUrl, data).then(response => {
     // Tanggapan sukses
-alert("Login berhasil. lihat token di console log halaman ini.");
-console.log("di bawah ini adalah hasil response lengkap:");
-console.log(response.data);
+// simpan response.data ke local storage
+    localStorage.setItem('access_token', response.data.auth.access_token);
+    localStorage.setItem('expires', response.data.auth.expires);
+        // Contoh: simpan juga data pengguna ke local storage jika diperlukan
+        localStorage.setItem('user', JSON.stringify(response.data.user));
     })
     .catch(error => {
     // Tanggapan error
     console.error(error);
     }); // end axios then catch
-  	} // end if sudah login
-    else {
-  		let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-url";
+} // end function getAccessToken
 
-       axios.get(apiUrl).then(response => {
-    // Tanggapan sukses
-   let authUrl = response.data.result;
-
-let loginUrl = $('<a>');
-loginUrl.attr("href", authUrl);
-loginUrl.text("Login dengan Keycloak");
-
-   $('#login-container').html(loginUrl);
-
-
-    })
-    .catch(error => {
-    // Tanggapan error
-    console.error(error);
-    }); // end axios then catch
-  	} // end else belum login
-  } // end function checStatus
-
-  checkStatus();
+getAccessToken();
 	});
 </script>
 </body>

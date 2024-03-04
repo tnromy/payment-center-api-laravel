@@ -18,6 +18,11 @@ Route::get('/', function() {
 });
 
 
+Route::get('/login', function() {
+	//echo "halo";
+	return view('login.index');
+});
+
 Route::get('/login/callback', function() {
 	//echo "halo";
 	return view('login.oauth2');
