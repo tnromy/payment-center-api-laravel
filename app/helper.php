@@ -14,3 +14,13 @@ function responseJsonForPaginate($data) {
 
                 return $data;
 }
+
+function responseJsonOk($data) {
+      return response()->json([
+                "status" => [
+                    "http_status_code" =>200,
+                    "http_status_message" => "OK"
+                ],
+                "result" => $data
+            ]);
+}

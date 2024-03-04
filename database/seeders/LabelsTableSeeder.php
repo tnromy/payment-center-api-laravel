@@ -4,9 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Folder;
+use App\Models\Label;
 
-class FoldersTableSeeder extends Seeder
+class LabelsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -33,6 +33,11 @@ class FoldersTableSeeder extends Seeder
             [
                 'email_id' => 1,
                 'name' => 'spam',
+            ],
+
+            [
+                'email_id' => 1,
+                'name' => 'stared',
             ],
 
                         [
@@ -90,7 +95,7 @@ class FoldersTableSeeder extends Seeder
         ];
 
         foreach ($data as $d) {
-            folder::create($d);
+            label::create($d);
         }
     }
 }

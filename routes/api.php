@@ -44,3 +44,7 @@ Route::controller(App\Http\Controllers\LocationController::class)->group(functio
     Route::get('/location/kecamatan/{code}/kelurahan-lists', 'villages'); // route untuk menampilkan daftar kelurahan di suatu kecamatan
 
 });
+
+Route::controller(App\Http\Controllers\ContactController::class)->group(function() {
+	Route::post('/contact', 'store')->middleware('keycloak');
+});

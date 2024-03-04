@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LocationsTableSeeder::class);
         $this->call(EmailsTableSeeder::class);
         $this->call(AliasesTableSeeder::class);
-        $this->call(FoldersTableSeeder::class);
+        $this->call(LabelsTableSeeder::class);
         // \App\Models\User::factory(10)->create();
 
         // \App\Models\User::factory()->create([

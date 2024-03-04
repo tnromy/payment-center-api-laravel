@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Scout\Searchable;
 
-class Folder extends Model
+class Label extends Model
 {
     use HasFactory, SoftDeletes, Searchable;
 

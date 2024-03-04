@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('folders', function (Blueprint $table) {
-             $table->id();
-            $table->foreignIdFor(App\Models\Email::class);
-            $table->string('name');
-            $table->softDeletes();
+        Schema::create('message_labels', function (Blueprint $table) {
+            $table->id();
+            $table->foreignIdFor(App\Models\Message::class);
+            $table->foreignIdFor(App\Models\Label::class);
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('folders');
+        Schema::dropIfExists('message_labels');
     }
 };
