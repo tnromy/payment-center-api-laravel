@@ -13,6 +13,9 @@ class ContactController extends Controller
     public function index()
     {
         //
+        $contacts = contact::paginate(12);
+
+        return responseJsonForPaginate($contacts);
     }
 
     /**
