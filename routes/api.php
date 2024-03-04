@@ -50,4 +50,5 @@ Route::controller(App\Http\Controllers\ContactController::class)->group(function
 	Route::get('/contacts', 'index')->middleware('keycloak');
 	Route::get('/contact/search', 'search')->middleware('keycloak');
 	Route::delete('/contact', 'destroy')->middleware('keycloak');
+	Route::put('/contact', 'update')->middleware('keycloak');
 });

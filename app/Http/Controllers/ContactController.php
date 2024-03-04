@@ -47,7 +47,7 @@ class ContactController extends Controller
         //
          $validator = \Validator::make($request->all(),[
       'full_name' => "required|string",
-        'email' => "required|email",
+        'email' => "required|email|unique:contacts,email",
         'phone' => "nullable|string",
         'whatsapp' => "nullable|string",
         'telegram' => "nullable|string",
@@ -93,9 +93,47 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         //
+         $validator = \Validator::make($request->all(),[
+      'id' => 'required|integer|exists:contacts,id',
+      'full_name' => "nullable|string",
+        'email' => "nullable|email|unique:contacts,email," . $request->id,
+        'phone' => "nullable|string",
+        'whatsapp' => "nullable|string",
+        'telegram' => "nullable|string",
+        'tel' => "nullable|string",
+        'addr_detail' => "nullable|string",
+        'addr_pos_code' => "nullable|integer",
+        'location_code' => "nullable|string|exists:locations,code"
+    ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                "status" => [
+                    "http_status_code" => 400,
+                    "http_status_message" => "Bad Request"
+                ],
+                "errors" => $validator->errors(),
+            ], 400);
+        } // end validator fails
+
+        $contact = contact::where('id', $request->id)->firstOrFail();
+
+        $contact->update([
+            'full_name' => $request->full_name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+        'whatsapp' => $request->whatsapp,
+        'telegram' => $request->telegram,
+        'tel' => $request->tel,
+        'addr_detail' => $request->addr_detail,
+        'addr_pos_code' => $request->addr_pos_code,
+        'location_code' => $request->location_code,
+        ]);
+
+        return responseJsonOk($contact);
     }
 
     /**
