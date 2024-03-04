@@ -101,8 +101,28 @@ class ContactController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
+        $validator = \Validator::make($request->all(),[
+            'id' => 'required|integer|exists:contacts,id',
+
+    ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                "status" => [
+                    "http_status_code" => 400,
+                    "http_status_message" => "Bad Request"
+                ],
+                "errors" => $validator->errors(),
+            ], 400);
+        } // end validator fails
+
+        $contact = contact::where('id', $request->id)->firstOrFail();
+
+        $contact->delete();
+
+        return responseJsonOk($contact);
     }
 }
