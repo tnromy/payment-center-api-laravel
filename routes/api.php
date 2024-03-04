@@ -48,4 +48,5 @@ Route::controller(App\Http\Controllers\LocationController::class)->group(functio
 Route::controller(App\Http\Controllers\ContactController::class)->group(function() {
 	Route::post('/contact', 'store')->middleware('keycloak');
 	Route::get('/contacts', 'index')->middleware('keycloak');
+	Route::get('/contact/search', 'search')->middleware('keycloak');
 });

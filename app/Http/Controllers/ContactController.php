@@ -21,6 +21,27 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function search(Request $request) {
+         $validator = \Validator::make($request->all(),[
+            'keyword' => 'required|string',
+
+    ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                "status" => [
+                    "http_status_code" => 400,
+                    "http_status_message" => "Bad Request"
+                ],
+                "errors" => $validator->errors(),
+            ], 400);
+        } // end validator fails
+
+        $results = contact::search($request->keyword)->paginate(6);
+
+         return responseJsonForPaginate($results);
+    }
+
     public function store(Request $request)
     {
         //
