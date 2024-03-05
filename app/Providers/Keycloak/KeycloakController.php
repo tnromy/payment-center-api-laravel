@@ -73,7 +73,7 @@ class KeycloakController extends  \App\Http\Controllers\Controller
             ],
             "user" => $userToken["user"],
             "auth" =>[
-                "access_token" => $userToken["token"],
+                "access_token" => $userToken["token"]->getToken(),
                 "expires" => $userToken["token"]->getExpires(),
                 "token_type" => "bearer"
             ],

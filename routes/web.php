@@ -28,5 +28,10 @@ Route::get('/login/callback', function() {
 	return view('login.oauth2');
 });
 
+Route::get('/contact', function() {
+	//echo "halo";
+	return view('contact.index');
+});
+
 
 

@@ -1,19 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Demo OAuth2 Example</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mail Cyber Center | login</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .loading-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+    }
+  </style>
 </head>
 <body>
-	
-	
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <!-- Loading Animation -->
+  <div class="loading-container text-center">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    <div>Loading...</div>
+  </div>
+
+  <!-- Content -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 text-center mt-5">
+        <h1>Welcome to Mail Cyber Center</h1>
+        <p>Please wait while login process...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
 
 <script>
-	$('document').ready(function() {
-		function parseUrl() {
+  $('document').ready(function() {
+    function setAuth(data) {
+      localStorage.setItem('user', JSON.stringify(data.user))
+      localStorage.setItem('access_token', data.auth.access_token)
+      localStorage.setItem('expires', data.auth.expires)
+
+    } // end function setAuth
+
+    function parseUrl() {
     // Gunakan elemen <a> untuk memanfaatkan browser built-in parsing URL
     var link = document.createElement('a');
     link.href = window.location.href;
@@ -49,10 +86,9 @@ let data = {
  axios.post(apiUrl, data).then(response => {
     // Tanggapan sukses
 // simpan response.data ke local storage
-    localStorage.setItem('access_token', response.data.auth.access_token);
-    localStorage.setItem('expires', response.data.auth.expires);
-        // Contoh: simpan juga data pengguna ke local storage jika diperlukan
-        localStorage.setItem('user', JSON.stringify(response.data.user));
+    setAuth(response.data)
+
+        window.location.href = "/contact";
     })
     .catch(error => {
     // Tanggapan error
@@ -61,7 +97,8 @@ let data = {
 } // end function getAccessToken
 
 getAccessToken();
-	});
+  });
 </script>
+
 </body>
 </html>
