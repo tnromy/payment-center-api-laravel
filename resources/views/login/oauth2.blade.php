@@ -1,56 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mail Cyber Center | login</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <style>
-    .loading-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      z-index: 9999;
-    }
-  </style>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Demo OAuth2 Example</title>
 </head>
 <body>
-  <!-- Loading Animation -->
-  <div class="loading-container text-center">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
-    </div>
-    <div>Loading...</div>
-  </div>
+	
+	<h1>API Simpeg Login OAuth2 Demo Example</h1>
 
-  <!-- Content -->
-  <div class="container">
-    <div class="row">
-      <div class="col-md-12 text-center mt-5">
-        <h1>Welcome to Mail Cyber Center</h1>
-        <p>Please wait while login process...</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Bootstrap Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <div id="login-container"></div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.1/axios.min.js"></script>
 
 <script>
-  $('document').ready(function() {
-    function setAuth(data) {
-      localStorage.setItem('user', JSON.stringify(data.user))
-      localStorage.setItem('access_token', data.auth.access_token)
-      localStorage.setItem('expires', data.auth.expires)
-
-    } // end function setAuth
-
-    function parseUrl() {
+	$('document').ready(function() {
+		function parseUrl() {
     // Gunakan elemen <a> untuk memanfaatkan browser built-in parsing URL
     var link = document.createElement('a');
     link.href = window.location.href;
@@ -74,8 +39,9 @@
     // Anda juga dapat mengembalikan nilai-nilai ini atau melakukan operasi lain sesuai kebutuhan.
   } // end function parseUrl
 
-      function getAccessToken() {
-        let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-token";
+  function checkStatus() {
+  	if(parseUrl()["state"] && parseUrl()["session_state"] && parseUrl()["code"]) {
+  		let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-token";
 
 let data = {
   "code": parseUrl()["code"],
@@ -83,22 +49,41 @@ let data = {
 
 };
 
- axios.post(apiUrl, data).then(response => {
+       axios.post(apiUrl, data).then(response => {
     // Tanggapan sukses
-// simpan response.data ke local storage
-    setAuth(response.data)
-
-        window.location.href = "/contact";
+alert("Login berhasil. lihat token di console log halaman ini.");
+console.log("di bawah ini adalah hasil response lengkap:");
+console.log(response.data);
     })
     .catch(error => {
     // Tanggapan error
     console.error(error);
     }); // end axios then catch
-} // end function getAccessToken
+  	} // end if sudah login
+    else {
+  		let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-url";
 
-getAccessToken();
-  });
+       axios.get(apiUrl).then(response => {
+    // Tanggapan sukses
+   let authUrl = response.data.result;
+
+let loginUrl = $('<a>');
+loginUrl.attr("href", authUrl);
+loginUrl.text("Login dengan Keycloak");
+
+   $('#login-container').html(loginUrl);
+
+
+    })
+    .catch(error => {
+    // Tanggapan error
+    console.error(error);
+    }); // end axios then catch
+  	} // end else belum login
+  } // end function checStatus
+
+  checkStatus();
+	});
 </script>
-
 </body>
 </html>

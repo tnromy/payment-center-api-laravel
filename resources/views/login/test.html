@@ -41,7 +41,7 @@
 
   function checkStatus() {
   	if(parseUrl()["state"] && parseUrl()["session_state"] && parseUrl()["code"]) {
-  		let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-token";
+  		let apiUrl = "https://apisimpeg.tangerangselatankota.go.id/api/login/oauth2-token";
 
 let data = {
   "code": parseUrl()["code"],
@@ -61,7 +61,7 @@ console.log(response.data);
     }); // end axios then catch
   	} // end if sudah login
     else {
-  		let apiUrl = "{{ env('APP_URL') }}/api/login/oauth2-url";
+  		let apiUrl = "https://apisimpeg.tangerangselatankota.go.id/api/login/oauth2-url";
 
        axios.get(apiUrl).then(response => {
     // Tanggapan sukses

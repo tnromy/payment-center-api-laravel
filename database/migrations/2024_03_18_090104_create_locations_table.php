@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('message_labels', function (Blueprint $table) {
-            $table->id();
-            $table->foreignIdFor(App\Models\Message::class);
-            $table->foreignIdFor(App\Models\Label::class);
+        Schema::create('locations', function (Blueprint $table) {
+            $table->id('id');
+            $table->string('code');
+            $table->string('name');
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('message_labels');
+        Schema::dropIfExists('locations');
     }
 };
