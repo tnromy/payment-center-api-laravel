@@ -28,6 +28,16 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    public function contactGroups(Request $request) {
+        $userId = $request->keycloak()->id;
+
+        $contactGroups =  Contact::whereHas('user', function ($query) use ($userId) {
+        $query->where('users.id', $userId);
+    })->where('id', $request->route('id'))->orderBy('last_use', 'desc')->firstOrFail()->contactGroup;
+
+        return responseJsonOk($contactGroups);
+    }
+
     public function search(Request $request) {
          $validator = \Validator::make($request->all(),[
             'keyword' => 'required|string',

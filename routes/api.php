@@ -32,6 +32,7 @@ Route::controller(App\Http\Controllers\ContactController::class)->group(function
 	Route::get('/contact/search', 'search')->middleware('keycloak');
 	Route::delete('/contact', 'destroy')->middleware('keycloak');
 	Route::put('/contact', 'update')->middleware('keycloak');
+	Route::get('/contact/{id}/groups', 'contactGroups')->middleware('keycloak');
 });
 
 Route::controller(App\Http\Controllers\ContactGroupController::class)->group(function() {

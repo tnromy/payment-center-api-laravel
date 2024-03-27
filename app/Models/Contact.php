@@ -24,6 +24,10 @@ class Contact extends Model
         ];
     }
 
+    public function contactGroup() {
+        return $this->belongsToMany(ContactGroup::class, 'contact_group_members')->withTimestamps();
+    }
+
     public function user() {
         return $this->belongsToMany(User::class, 'contact_accesses')->withTimestamps();
     }

@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('contact_group_members', function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(App\Models\Contact::class);
+            $table->foreignIdFor(App\Models\ContactGroup::class);
             $table->timestamps();
         });
     }

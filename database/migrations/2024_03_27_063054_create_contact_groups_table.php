@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignIdFor(App\Models\ContactGroupType::class);
+            $table->dateTime('last_use')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -18,4 +18,9 @@ class ContactGroup extends Model
         'name',
         'contact_group_type_id'
     ];
+
+     public function contact() {
+        return $this->belongsToMany(Contact::class, 'contact_group_members')->withTimestamps();
+    }
+
 }
