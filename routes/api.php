@@ -33,3 +33,7 @@ Route::controller(App\Http\Controllers\ContactController::class)->group(function
 	Route::delete('/contact', 'destroy')->middleware('keycloak');
 	Route::put('/contact', 'update')->middleware('keycloak');
 });
+
+Route::controller(App\Http\Controllers\ContactGroupController::class)->group(function() {
+	Route::get('/contact-groups', 'index')->middleware('keycloak');
+});

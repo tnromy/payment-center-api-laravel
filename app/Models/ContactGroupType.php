@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ContactAccess extends Model
+class ContactGroupType extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'contact_id',
-        'user_id'
+        'name',
+        'icon_path'
     ];
 }
