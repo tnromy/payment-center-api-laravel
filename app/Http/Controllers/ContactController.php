@@ -4,19 +4,26 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Contact;
+use Carbon\Carbon;
 
 class ContactController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-        $contacts = contact::paginate(12);
+    public function index(Request $request)
+{
+    // Mendapatkan user_id dari request (misalnya dari query string atau parameter route)
+    $userId = $request->keycloak()->id;
 
-        return responseJsonForPaginate($contacts);
-    }
+    // Menggunakan metode whereHas untuk menyaring kontak yang terkait dengan user_id tertentu di table contact_accesses
+    $contacts = Contact::whereHas('user', function ($query) use ($userId) {
+        $query->where('users.id', $userId);
+    })->orderBy('last_use', 'desc')->paginate(8);
+
+    return responseJsonForPaginate($contacts);
+}
+
 
     /**
      * Store a newly created resource in storage.
@@ -28,13 +35,7 @@ class ContactController extends Controller
     ]);
 
         if($validator->fails()) {
-            return response()->json([
-                "status" => [
-                    "http_status_code" => 400,
-                    "http_status_message" => "Bad Request"
-                ],
-                "errors" => $validator->errors(),
-            ], 400);
+            return responseJsonError400($validator->errors());
         } // end validator fails
 
         $results = contact::search($request->keyword)->paginate(6);
@@ -47,7 +48,7 @@ class ContactController extends Controller
         //
          $validator = \Validator::make($request->all(),[
       'full_name' => "required|string",
-        'email' => "required|email|unique:contacts,email",
+        'email' => "required|email",
         'phone' => "nullable|string",
         'whatsapp' => "nullable|string",
         'telegram' => "nullable|string",
@@ -58,13 +59,7 @@ class ContactController extends Controller
     ]);
 
         if($validator->fails()) {
-            return response()->json([
-                "status" => [
-                    "http_status_code" => 400,
-                    "http_status_message" => "Bad Request"
-                ],
-                "errors" => $validator->errors(),
-            ], 400);
+            return responseJsonError400($validator->errors());
         } // end validator fails
 
         $contact = contact::create([
@@ -77,6 +72,9 @@ class ContactController extends Controller
         'addr_detail' => $request->addr_detail,
         'addr_pos_code' => $request->addr_pos_code,
         'location_code' => $request->location_code,
+        'last_use' => Carbon::now()
+        ])->user()->attach([
+            $request->keycloak()->id
         ]);
 
         return responseJsonOk($contact);
@@ -99,7 +97,7 @@ class ContactController extends Controller
          $validator = \Validator::make($request->all(),[
       'id' => 'required|integer|exists:contacts,id',
       'full_name' => "nullable|string",
-        'email' => "nullable|email|unique:contacts,email," . $request->id,
+        'email' => "nullable|email",
         'phone' => "nullable|string",
         'whatsapp' => "nullable|string",
         'telegram' => "nullable|string",
@@ -110,13 +108,7 @@ class ContactController extends Controller
     ]);
 
         if($validator->fails()) {
-            return response()->json([
-                "status" => [
-                    "http_status_code" => 400,
-                    "http_status_message" => "Bad Request"
-                ],
-                "errors" => $validator->errors(),
-            ], 400);
+            return responseJsonError400($validator->errors());
         } // end validator fails
 
         $contact = contact::where('id', $request->id)->firstOrFail();
@@ -148,13 +140,7 @@ class ContactController extends Controller
     ]);
 
         if($validator->fails()) {
-            return response()->json([
-                "status" => [
-                    "http_status_code" => 400,
-                    "http_status_message" => "Bad Request"
-                ],
-                "errors" => $validator->errors(),
-            ], 400);
+            return responseJsonError400($validator->errors());
         } // end validator fails
 
         $contact = contact::where('id', $request->id)->firstOrFail();

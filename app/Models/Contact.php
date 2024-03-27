@@ -24,6 +24,10 @@ class Contact extends Model
         ];
     }
 
+    public function user() {
+        return $this->belongsToMany(User::class, 'contact_accesses')->withTimestamps();
+    }
+
     protected $fillable = [
         'ava',
         'full_name',
@@ -34,6 +38,7 @@ class Contact extends Model
         'tel',
         'addr_detail',
         'addr_pos_code',
-        'location_code'
+        'location_code',
+        'last_use'
     ];
 }

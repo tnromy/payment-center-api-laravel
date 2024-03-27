@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('addr_detail')->nullable();
             $table->string('addr_pos_code')->nullable();
             $table->string('location_code')->nullable();
+            $table->dateTime('last_use')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
