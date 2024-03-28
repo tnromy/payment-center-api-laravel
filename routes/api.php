@@ -40,6 +40,7 @@ Route::controller(App\Http\Controllers\ContactGroupController::class)->group(fun
 	Route::post('/contact-group', 'store')->middleware('keycloak');
 	Route::post('/contact-group/{id}/member', 'addMember')->middleware('keycloak');
 	Route::get('/contact-group/{id}/members', 'getMembers')->middleware('keycloak');
+	Route::delete('/contact-group/{id}/member', 'removeMember')->middleware('keycloak');
 });
 
 Route::controller(App\Http\Controllers\ContactGroupTypeController::class)->group(function() {
