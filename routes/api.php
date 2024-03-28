@@ -39,6 +39,7 @@ Route::controller(App\Http\Controllers\ContactGroupController::class)->group(fun
 	Route::get('/contact-groups', 'index')->middleware('keycloak');
 	Route::post('/contact-group', 'store')->middleware('keycloak');
 	Route::post('/contact-group/{id}/member', 'addMember')->middleware('keycloak');
+	Route::get('/contact-group/{id}/members', 'getMembers')->middleware('keycloak');
 });
 
 Route::controller(App\Http\Controllers\ContactGroupTypeController::class)->group(function() {

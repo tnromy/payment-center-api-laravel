@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\ContactGroup;
+use App\Models\Contact;
 use Carbon\Carbon;
 
 class ContactGroupController extends Controller
@@ -22,6 +23,29 @@ class ContactGroupController extends Controller
     })->orderBy('last_use', 'desc')->paginate(8);
 
     return responseJsonForPaginate($contactGroups);
+}
+
+public function getMembers(Request $request)
+{
+    // Mendapatkan user_id dari request (misalnya dari query string atau parameter route)
+    $request->merge(['id' => $request->route('id')]);
+
+         $validator = \Validator::make($request->all(),[
+            'id' => 'required|integer|exists:contact_groups,id'
+    ]);
+
+        if($validator->fails()) {
+            return responseJsonError400($validator->errors());
+        } // end validator fails
+
+        $contactGroupId = $request->id;
+
+    // Menggunakan metode whereHas untuk menyaring kontak yang terkait dengan user_id tertentu di table contact_accesses
+    $members = Contact::whereHas('contactGroup', function ($query) use ($contactGroupId) {
+        $query->where('contact_groups.id', $contactGroupId);
+    })->orderBy('last_use', 'desc')->paginate(8);
+
+    return responseJsonForPaginate($members);
 }
 
     /**
