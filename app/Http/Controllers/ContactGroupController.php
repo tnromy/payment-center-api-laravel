@@ -125,9 +125,28 @@ public function getMembers(Request $request)
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request)
     {
         //
+         $validator = \Validator::make($request->all(),[
+            'id' => 'required|integer|exists:contact_groups,id',
+            'name' => 'required|string|unique:contact_groups,name,' . $request->id,
+            'contact_group_type_id' => 'required|integer|exists:contact_group_types,id'
+    ]);
+
+        if($validator->fails()) {
+            return responseJsonError400($validator->errors());
+        } // end validator fails
+
+        $contactGroup = contactGroup::find($request->id);
+
+        $contactGroup->update([
+            'name' => $request->name,
+            'contact_group_type_id' => $request->contact_group_type_id,
+        'last_use' => Carbon::now()
+        ]);
+
+        return responseJsonOk($contactGroup);
     }
 
     /**
