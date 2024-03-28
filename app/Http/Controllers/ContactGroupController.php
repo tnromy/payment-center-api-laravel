@@ -50,6 +50,29 @@ class ContactGroupController extends Controller
         return responseJsonOk($contactGroup);
     }
 
+    public function addMember(Request $request)
+    {
+        //
+         $request->merge(['id' => $request->route('id')]);
+
+         $validator = \Validator::make($request->all(),[
+            'contact_id' => 'required|integer|exists:contacts,id',
+            'id' => 'required|integer|exists:contact_groups,id'
+    ]);
+
+        if($validator->fails()) {
+            return responseJsonError400($validator->errors());
+        } // end validator fails
+
+        $contactGroup = contactGroup::find($request->id);
+
+        $contactGroup->contact()->sync([
+            $request->contact_id
+        ]);
+
+        return responseJsonOk($contactGroup);
+    }
+
     /**
      * Display the specified resource.
      */
