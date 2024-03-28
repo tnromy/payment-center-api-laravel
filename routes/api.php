@@ -30,7 +30,7 @@ Route::controller(App\Http\Controllers\ContactController::class)->group(function
 	Route::post('/contact', 'store')->middleware('keycloak');
 	Route::get('/contacts', 'index')->middleware('keycloak');
 	Route::get('/contact/search', 'search')->middleware('keycloak');
-	Route::delete('/contact', 'destroy')->middleware('keycloak');
+	Route::delete('/contact/{id}', 'destroy')->middleware('keycloak');
 	Route::put('/contact', 'update')->middleware('keycloak');
 	Route::get('/contact/{id}/groups', 'contactGroups')->middleware('keycloak');
 });
@@ -41,6 +41,7 @@ Route::controller(App\Http\Controllers\ContactGroupController::class)->group(fun
 	Route::post('/contact-group/{id}/member', 'addMember')->middleware('keycloak');
 	Route::get('/contact-group/{id}/members', 'getMembers')->middleware('keycloak');
 	Route::delete('/contact-group/{id}/member', 'removeMember')->middleware('keycloak');
+	Route::delete('/contact-group/{id}', 'destroy')->middleware('keycloak');
 });
 
 Route::controller(App\Http\Controllers\ContactGroupTypeController::class)->group(function() {

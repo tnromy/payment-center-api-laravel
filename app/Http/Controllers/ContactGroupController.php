@@ -67,9 +67,7 @@ public function getMembers(Request $request)
             'name' => $request->name,
             'contact_group_type_id' => $request->contact_group_type_id,
         'last_use' => Carbon::now()
-        ])->user()->attach([
-            $request->keycloak()->id
-        ]);
+        ])->user()->attach($request->keycloak()->id);
 
         return responseJsonOk($contactGroup);
     }
@@ -90,9 +88,7 @@ public function getMembers(Request $request)
 
         $contactGroup = contactGroup::find($request->id);
 
-        $contactGroup->contact()->sync([
-            $request->contact_id
-        ]);
+        $contactGroup->contact()->attach($request->contact_id);
 
         return responseJsonOk($contactGroup);
     }
@@ -113,9 +109,7 @@ public function getMembers(Request $request)
 
         $contactGroup = contactGroup::find($request->id);
 
-        $contactGroup->contact()->detach([
-            $request->contact_id
-        ]);
+        $contactGroup->contact()->detach($request->contact_id);
 
         return responseJsonOk($contactGroup);
     }
@@ -139,8 +133,27 @@ public function getMembers(Request $request)
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Request $request)
     {
         //
+        $request->merge(['id' => $request->route('id')]);
+
+        $validator = \Validator::make($request->all(),[
+            'id' => 'required|integer|exists:contact_groups,id',
+
+    ]);
+
+        if($validator->fails()) {
+            return responseJsonError400($validator->errors());
+        } // end validator fails
+
+        $contactGroup = contactGroup::find($request->id);
+
+        $contactGroup->contact()->detach();
+        $contactGroup->user()->detach();
+
+        $contactGroup->delete();
+
+        return responseJsonOk($contactGroup);
     }
 }

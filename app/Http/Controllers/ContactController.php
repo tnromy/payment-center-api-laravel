@@ -83,9 +83,7 @@ class ContactController extends Controller
         'addr_pos_code' => $request->addr_pos_code,
         'location_code' => $request->location_code,
         'last_use' => Carbon::now()
-        ])->user()->attach([
-            $request->keycloak()->id
-        ]);
+        ])->user()->attach($request->keycloak()->id);
 
         return responseJsonOk($contact);
     }
@@ -144,6 +142,8 @@ class ContactController extends Controller
     public function destroy(Request $request)
     {
         //
+        $request->merge(['id' => $request->route('id')]);
+
         $validator = \Validator::make($request->all(),[
             'id' => 'required|integer|exists:contacts,id',
 
@@ -153,7 +153,10 @@ class ContactController extends Controller
             return responseJsonError400($validator->errors());
         } // end validator fails
 
-        $contact = contact::where('id', $request->id)->firstOrFail();
+        $contact = contact::find($request->id);
+
+        $contact->contactGroup()->detach();
+        $contact->user()->detach();
 
         $contact->delete();
 
