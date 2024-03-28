@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::controller(App\Providers\Keycloak\KeycloakController::class)->group(function() {
 	Route::get('/login/oauth2-url', 'getOauth2URL');
 	Route::post('/login/oauth2-token', 'getAccessToken');
+	Route::post('/login', 'login');
 	Route::get('/login/oauth2-refresh', 'refreshToken');
 	Route::get('/login/oauth2-user', 'getUserInfo')->middleware('keycloak');
 	Route::get('/logout/oauth2-url', 'getLogoutURL')->middleware(["keycloak:Admin|ASN|OP BKSDM|OP OPD|OP PD"]);

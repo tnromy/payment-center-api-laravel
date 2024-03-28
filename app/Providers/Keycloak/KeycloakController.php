@@ -29,6 +29,42 @@ class KeycloakController extends  \App\Http\Controllers\Controller
         ], 200);
     }
 
+    public function login(Request $request) {
+         $validator = \Validator::make($request->all(),[
+            'username' => 'required|string',
+            'password' => 'required|string'
+
+    ]);
+
+        if($validator->fails()) {
+            return responseJsonError400($validator->errors());
+        } // end validator fails
+
+         $keycloak = new Keycloak();
+        $userToken = $keycloak->getUserAccessTokenForBackend([
+            'username' => $request->username,
+            'password' => $request->password,
+        ]);
+
+        return response()->json([
+            "status" => [
+                "http_status_code" => 200,
+                "http_status_message" => "OK"
+            ],
+            "user" => $userToken["user"],
+            "auth" =>[
+                "access_token" => $userToken["token"]->getToken(),
+                "expires" => $userToken["token"]->getExpires(),
+                "token_type" => "bearer"
+            ],
+        ], 200);
+
+        $results = contact::search($request->keyword)->paginate(6);
+
+         return responseJsonForPaginate($results);
+    
+    }
+
     public function getLogoutURL(Request $request) {
         $keycloak = new Keycloak();
         $token = $request->bearerToken();

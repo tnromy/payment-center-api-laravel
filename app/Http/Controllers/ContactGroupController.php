@@ -168,8 +168,8 @@ public function getMembers(Request $request)
 
         $contactGroup = contactGroup::find($request->id);
 
-        $contactGroup->contact()->detach();
-        $contactGroup->user()->detach();
+        //$contactGroup->contact()->detach();
+        //$contactGroup->user()->detach();
 
         $contactGroup->delete();
 

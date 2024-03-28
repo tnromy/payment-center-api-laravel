@@ -423,6 +423,22 @@ class Keycloak extends AbstractProvider
          return $tokenData;
     }
 
+    public function getUserAccessTokenForBackend($data) {
+        //
+         $token = $this->getAccessToken('password', $data);
+
+         $user = $this->getUserIntrospect($token->getToken());
+
+         $tokenData = compact([
+            'token',
+            'user'
+         ]);
+
+         Redis::set('keycloak' . $user->id, json_encode($tokenData));
+
+         return $tokenData;
+    }
+
     public function getUserRefreshToken($data) {
         //
          $token = $this->getAccessToken('refresh_token', [

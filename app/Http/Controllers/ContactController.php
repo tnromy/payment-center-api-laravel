@@ -155,8 +155,8 @@ class ContactController extends Controller
 
         $contact = contact::find($request->id);
 
-        $contact->contactGroup()->detach();
-        $contact->user()->detach();
+        //$contact->contactGroup()->detach();
+        //$contact->user()->detach();
 
         $contact->delete();
 
