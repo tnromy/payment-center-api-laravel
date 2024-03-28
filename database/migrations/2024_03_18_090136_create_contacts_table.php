@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('ava')->default('contacts/default.png');
             $table->string('full_name');
-            $table->string('email');
-            $table->string('phone')->nullable();
-            $table->string('whatsapp')->nullable();
-            $table->string('telegram')->nullable();
-            $table->string('tel')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone')->nullable()->unique();
+            $table->string('whatsapp')->nullable()->unique();
+            $table->string('telegram')->nullable()->unique();
+            $table->string('tel')->nullable()->unique();
             $table->string('addr_detail')->nullable();
             $table->string('addr_pos_code')->nullable();
             $table->string('location_code')->nullable();

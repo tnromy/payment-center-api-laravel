@@ -14,9 +14,14 @@ class ContactGroup extends Model
         return $this->belongsTo(ContactGroupType::class);
     }
 
+    public function user() {
+        return $this->belongsToMany(User::class, 'contact_group_accesses')->withTimestamps();
+    }
+
     protected $fillable = [
         'name',
-        'contact_group_type_id'
+        'contact_group_type_id',
+        'last_use'
     ];
 
      public function contact() {

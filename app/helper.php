@@ -24,3 +24,13 @@ function responseJsonOk($data) {
                 "result" => $data
             ]);
 }
+
+function responseJsonError400($data) {
+      return response()->json( [
+                'status' => [
+                    'http_status_code' => 400,
+                    'http_status_message' => 'Bad Request'
+                ],
+                'errors' => $data,
+            ], 400 );
+}

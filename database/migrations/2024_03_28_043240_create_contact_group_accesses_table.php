@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('contact_groups', function (Blueprint $table) {
+        Schema::create('contact_group_accesses', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->foreignIdFor(App\Models\ContactGroupType::class);
-            $table->dateTime('last_use')->nullable();
-            $table->softDeletes();
+            $table->foreignIdFor(\App\Models\ContactGroup::class);
+            $table->foreignIdFor(\App\Models\User::class);
             $table->timestamps();
         });
     }
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('contact_groups');
+        Schema::dropIfExists('contact_group_accesses');
     }
 };

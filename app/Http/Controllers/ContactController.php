@@ -58,11 +58,11 @@ class ContactController extends Controller
         //
          $validator = \Validator::make($request->all(),[
       'full_name' => "required|string",
-        'email' => "required|email",
-        'phone' => "nullable|string",
-        'whatsapp' => "nullable|string",
-        'telegram' => "nullable|string",
-        'tel' => "nullable|string",
+        'email' => "required|email|unique:contacts,email",
+        'phone' => "nullable|string|unique:contacts,phone",
+        'whatsapp' => "nullable|string|unique:contacts,whatsapp",
+        'telegram' => "nullable|string|unique:contacts,telegram",
+        'tel' => "nullable|string|unique:contacts,tel",
         'addr_detail' => "nullable|string",
         'addr_pos_code' => "nullable|integer",
         'location_code' => "nullable|string|exists:locations,code"
