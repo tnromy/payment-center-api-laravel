@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('ava')->default('contacts/default.png');
             $table->string('full_name');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('phone')->nullable()->unique();
             $table->string('whatsapp')->nullable()->unique();
             $table->string('telegram')->nullable()->unique();

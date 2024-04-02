@@ -58,7 +58,7 @@ class ContactController extends Controller
         //
          $validator = \Validator::make($request->all(),[
       'full_name' => "required|string",
-        'email' => "required|email|unique:contacts,email",
+        'email' => "nullable|email|unique:contacts,email",
         'phone' => "nullable|string|unique:contacts,phone",
         'whatsapp' => "nullable|string|unique:contacts,whatsapp",
         'telegram' => "nullable|string|unique:contacts,telegram",

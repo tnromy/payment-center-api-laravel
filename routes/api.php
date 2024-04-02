@@ -49,3 +49,8 @@ Route::controller(App\Http\Controllers\ContactGroupController::class)->group(fun
 Route::controller(App\Http\Controllers\ContactGroupTypeController::class)->group(function() {
 	Route::get('/contact-group-types', 'index')->middleware('keycloak');
 });
+
+
+Route::controller(App\Http\Controllers\MailController::class)->group(function() {
+	Route::get('/email', 'store');
+});
