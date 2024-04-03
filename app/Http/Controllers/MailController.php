@@ -22,11 +22,19 @@ class MailController extends Controller
     {
         //
         $mail = new MailProvider(
-            template: "mails.main",
-            subject: "ini pesan pakai harus default queue"
-        );
+                    mailFrom: [
+                        "name" => "dari controller",
+                        "email" => "designer@cybercenter.co.id"
+                    ],
+                    mailReplyTo: [
+                        "name" => "dari controller",
+                        "email" => "designer@cybercenter.co.id"
+                    ],
+                    subject: "coba 200",
+                    template: "mails.main",
+                );
 
-        \Mail::to('tuanromy@gmail.com')->send($mail);
+        \Mail::to('tuanromy@gmail.com')->queue($mail);
 
         return "sudah";
     }

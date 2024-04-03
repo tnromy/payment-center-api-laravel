@@ -10,7 +10,7 @@ use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Mail\Mailables\Address;
 
-class MailProvider extends Mailable implements ShouldQueue
+class MailProvider extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,8 +19,10 @@ class MailProvider extends Mailable implements ShouldQueue
      * Create a new message instance.
      */
      public function __construct(
-        public $template,
+        public $mailFrom,
+        public $mailReplyTo,
         public $subject,
+        public $template,
      )
     {
         //
@@ -34,10 +36,10 @@ class MailProvider extends Mailable implements ShouldQueue
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('tasya@cybercenter.co.id', 'Tn. Romy'),
+            from: new Address($this->mailFrom["email"], $this->mailFrom["name"]),
             subject: $this->subject,
              replyTo: [
-        new Address('tasya@cybercenter.co.id', 'Tn. Romy'),
+        new Address($this->mailReplyTo["email"], $this->mailReplyTo["name"]),
     ],
         );
     }
