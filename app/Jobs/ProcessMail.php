@@ -19,8 +19,9 @@ class ProcessMail implements ShouldQueue
      */
     public function __construct(
            public $configId,
-           public $mailFrom,
-        public $mailReplyTo,
+           public $from,
+        public $replyTo,
+        public $to,
         public $subject,
         public $template,
     )
@@ -47,12 +48,12 @@ class ProcessMail implements ShouldQueue
         ]);
 
            $mail = new MailProvider(
-                    mailFrom: $this->mailFrom,
-                    mailReplyTo: $this->mailReplyTo,
+                    mailFrom: $this->from,
+                    mailReplyTo: $this->replyTo,
                     subject: $this->subject,
                     template: $this->template,
                 );
 
-        \Mail::mailer('dynamics' . $this->configId)->to('tuanromy@gmail.com')->send($mail);
+        \Mail::mailer('dynamics' . $this->configId)->to($this->to)->send($mail);
     }
 }

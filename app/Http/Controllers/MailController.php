@@ -23,14 +23,15 @@ class MailController extends Controller
         //
      ProcessMail::dispatch(
         configId: 1,
-        mailFrom: [
+        from: [
                         "name" => "dari controller",
                         "email" => "designer@cybercenter.co.id"
                     ],
-                    mailReplyTo: [
+                    replyTo: [
                         "name" => "dari controller",
                         "email" => "designer@cybercenter.co.id"
                     ],
+                    to: "tuanromy@gmail.com",
                     subject: "coba 200",
                     template: "mails.main"
      );
