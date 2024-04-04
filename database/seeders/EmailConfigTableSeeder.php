@@ -21,7 +21,7 @@ class EmailConfigTableSeeder extends Seeder
             'host' => "smtp.gmail.com",
             'port' => 587,
             'username' => "inside@tnromy.com",
-            'password' => "yjny kioc ivgi qrfv",
+            'password' => "",
             'enc' => "tls",
     
             ],
@@ -32,7 +32,7 @@ class EmailConfigTableSeeder extends Seeder
             'host' => "smtp.gmail.com",
             'port' => 587,
             'username' => "indonesiacybercenter@gmail.com",
-            'password' => "mavj tmmn gwlt slem",
+            'password' => "",
             'enc' => "tls",
     
             ],
