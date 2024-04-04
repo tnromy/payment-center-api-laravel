@@ -11,7 +11,7 @@ class EmailConfig extends Model
 {
     use HasFactory;
         protected $fillable = [
-                'mailer',
+                'transport',
             'host',
             'port',
             'username',

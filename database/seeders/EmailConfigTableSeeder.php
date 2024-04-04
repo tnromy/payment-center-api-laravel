@@ -17,7 +17,7 @@ class EmailConfigTableSeeder extends Seeder
         $data = [
             [
 
-                'mailer' => "smtp",
+                'transport' => "smtp",
             'host' => "smtp.gmail.com",
             'port' => 587,
             'username' => "inside@tnromy.com",
@@ -28,7 +28,7 @@ class EmailConfigTableSeeder extends Seeder
 
              [
 
-                'mailer' => "smtp",
+                'transport' => "smtp",
             'host' => "smtp.gmail.com",
             'port' => 587,
             'username' => "indonesiacybercenter@gmail.com",

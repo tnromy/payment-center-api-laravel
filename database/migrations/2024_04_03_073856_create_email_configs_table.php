@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('email_configs', function (Blueprint $table) {
             $table->id();
-            $table->string('mailer');
+            $table->string('transport');
             $table->string('host');
             $table->integer('port');
             $table->string('username');

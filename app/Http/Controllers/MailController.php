@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Mail\MailProvider;
+use App\Jobs\ProcessMail;
 
 class MailController extends Controller
 {
@@ -21,8 +21,9 @@ class MailController extends Controller
     public function store(Request $request)
     {
         //
-        $mail = new MailProvider(
-                    mailFrom: [
+     ProcessMail::dispatch(
+        configId: 1,
+        mailFrom: [
                         "name" => "dari controller",
                         "email" => "designer@cybercenter.co.id"
                     ],
@@ -31,10 +32,8 @@ class MailController extends Controller
                         "email" => "designer@cybercenter.co.id"
                     ],
                     subject: "coba 200",
-                    template: "mails.main",
-                );
-
-        \Mail::to('tuanromy@gmail.com')->queue($mail);
+                    template: "mails.main"
+     );
 
         return "sudah";
     }
