@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->string('enc');
             $table->boolean('is_active')->default(true);
+            $table->softDeletes();
             $table->timestamps();
         });
     }
