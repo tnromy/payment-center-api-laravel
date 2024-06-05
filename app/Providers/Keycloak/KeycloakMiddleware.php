@@ -6,6 +6,12 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Providers\Keycloak\Keycloak;
+use App\Providers\Keycloak\KeycloakUser;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\SignatureInvalidException;
+use Illuminate\Support\Facades\Redis;
 
 class KeycloakMiddleware
 {
@@ -30,17 +36,31 @@ class KeycloakMiddleware
             ], 401);
         } // end if no $token
 
-        $decodedToken = $keycloak->getUserIntrospect($token);
+               try {
+            JWT::$leeway = 60;
+            $decodedToken = JWT::decode($token, new Key(env('KEYCLOAK_ENCRYPTION_KEY'), 'RS256'));
 
-        if(!$decodedToken->active) {
-             return response()->json([
+        }  catch (ExpiredException $e){
+
+ return response()->json([
                     "status" => [
                         "http_status_code" => 401,
                         "http_status_message" => "Unauthorized"
                     ],
-                    "errors" => "Token Expired",
+                    "errors" => "access_token has been expired" ,
                 ], 401);
-        }
+} catch (SignatureInvalidException $e) {
+    // provided JWT signature verification failed.
+    return response()->json([
+                    "status" => [
+                        "http_status_code" => 401,
+                        "http_status_message" => "Unauthorized"
+                    ],
+                    "errors" => "Invalid JWT signature" ,
+                ], 401);
+}
+
+        $decodedToken = new KeycloakUser($decodedToken);
 
         if($role) {
             if(!$decodedToken->hasRole($role)) {
@@ -61,5 +81,6 @@ $request->macro('keycloak', function () use ($decodedToken) {
         });
 
          return $next($request);
+
     }
 }

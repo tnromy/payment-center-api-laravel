@@ -4,22 +4,26 @@ namespace App\Providers\Keycloak;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Role;
+use Illuminate\Support\Facades\Hash;
+use App\Models\UserRole;
+use App\Models\SystemConfig;
 use App\Providers\Keycloak\Keycloak;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\URL;
 
 
-class KeycloakController extends  \App\Http\Controllers\Controller
+
+class KeycloakController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
      */
-    /**
-     * Store a newly created resource in storage.
-     */
+    
+
     public function getOauth2URL() {
         $keycloak = new Keycloak();
         $authUrl = $keycloak->getAuthorizationUrl();
-
          return response()->json([
             "status" => [
                 "http_status_code" => 200,
@@ -27,42 +31,6 @@ class KeycloakController extends  \App\Http\Controllers\Controller
             ],
             "result" => $authUrl,
         ], 200);
-    }
-
-    public function login(Request $request) {
-         $validator = \Validator::make($request->all(),[
-            'username' => 'required|string',
-            'password' => 'required|string'
-
-    ]);
-
-        if($validator->fails()) {
-            return responseJsonError400($validator->errors());
-        } // end validator fails
-
-         $keycloak = new Keycloak();
-        $userToken = $keycloak->getUserAccessTokenForBackend([
-            'username' => $request->username,
-            'password' => $request->password,
-        ]);
-
-        return response()->json([
-            "status" => [
-                "http_status_code" => 200,
-                "http_status_message" => "OK"
-            ],
-            "user" => $userToken["user"],
-            "auth" =>[
-                "access_token" => $userToken["token"]->getToken(),
-                "expires" => $userToken["token"]->getExpires(),
-                "token_type" => "bearer"
-            ],
-        ], 200);
-
-        $results = contact::search($request->keyword)->paginate(6);
-
-         return responseJsonForPaginate($results);
-    
     }
 
     public function getLogoutURL(Request $request) {
@@ -102,16 +70,15 @@ class KeycloakController extends  \App\Http\Controllers\Controller
             'state' => $request->state,
         ]);
 
+       $accessToken = $userToken["token"]->getToken();
         return response()->json([
             "status" => [
                 "http_status_code" => 200,
                 "http_status_message" => "OK"
             ],
             "user" => $userToken["user"],
-            "auth" =>[
-                "access_token" => $userToken["token"]->getToken(),
-                "expires" => $userToken["token"]->getExpires(),
-                "token_type" => "bearer"
+            "auth" => [
+                "access_token" => $accessToken
             ],
         ], 200);
     }
@@ -130,6 +97,8 @@ if($token == $userToken->token->access_token) {
     $userToken = $keycloak->getUserRefreshToken($userToken->token->refresh_token);
 }
 
+  $accessToken = $userToken->token->access_token;
+
  return response()->json([
             "status" => [
                 "http_status_code" => 200,
@@ -144,5 +113,5 @@ if($token == $userToken->token->access_token) {
         ], 200);
 
     }
-     
+
 }

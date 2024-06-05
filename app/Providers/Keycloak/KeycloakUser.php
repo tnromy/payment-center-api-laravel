@@ -6,22 +6,26 @@ namespace App\Providers\Keycloak;
 class KeycloakUser
 {
     private $decodedToken;
-    public $id;
+    public $user_id;
     public $email;
     public $username;
     public $full_name;
     public $phone;
+    public $nik;
     public $roles;
 
     public function __construct($decodedToken)
     {
         // dd($decodedToken);
         $this->decodedToken = $decodedToken;
-        $this->id = $decodedToken->sub;
+        $this->user_id = $decodedToken->sub;
         $this->email = $decodedToken->email;
         $this->username = $decodedToken->preferred_username;
         $this->full_name = $decodedToken->name;
         $this->phone = $decodedToken->phone??null;
+        $this->nik = $decodedToken->nik??null;
+
+
         $clientId = env('KEYCLOAK_CLIENT_ID');
 
         $this->roles = $this->decodedToken->resource_access->{$clientId}->roles;

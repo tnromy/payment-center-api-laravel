@@ -418,23 +418,7 @@ class Keycloak extends AbstractProvider
             'user'
          ]);
 
-         Redis::set('keycloak' . $user->id, json_encode($tokenData));
-
-         return $tokenData;
-    }
-
-    public function getUserAccessTokenForBackend($data) {
-        //
-         $token = $this->getAccessToken('password', $data);
-
-         $user = $this->getUserIntrospect($token->getToken());
-
-         $tokenData = compact([
-            'token',
-            'user'
-         ]);
-
-         Redis::set('keycloak' . $user->id, json_encode($tokenData));
+         Redis::set('keycloak' . $user->user_id, json_encode($tokenData));
 
          return $tokenData;
     }
@@ -452,7 +436,7 @@ class Keycloak extends AbstractProvider
             'user'
          ]);
 
-         Redis::set('keycloak' . $user->id, json_encode($tokenData));
+         Redis::set('keycloak' . $user->user_id, json_encode($tokenData));
 
          return (object)[
             "user" => $user,
@@ -479,7 +463,7 @@ $response = $client->post($this->getBaseUrlWithRealm().'/protocol/openid-connect
        if($body->active) {
         $user = new KeycloakUser($body);
 
-       $userModel = User::find($user->id);
+       $userModel = User::find($user->user_id);
 
          $userData = [
                 'username' => $user->preferred_username,
@@ -487,12 +471,19 @@ $response = $client->post($this->getBaseUrlWithRealm().'/protocol/openid-connect
                 'email' => $user->email,
             ];
 
+            if(isset($user->phone)) {
+                $userData["phone"] = $user->phone;
+            }
+            if(isset($user->telp)) {
+                $userData["telp"] = $user->telp;
+            }
+
         if(!$userModel) {
-            $userData["id"] = $user->id;
-            $userData['added_by_user_id'] = $user->id;
+            $userData["id"] = $user->user_id;
+            $userData['added_by_user_id'] = $user->user_id;
             user::create($userData);
         } else {
-$userData['updated_by_user_id'] = $user->id;
+$userData['updated_by_user_id'] = $user->user_id;
             $userModel->update($userData);
         }
 
